@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "test-virtual-kubelet.fullname" . }}
+  labels:
+{{ include "test-virtual-kubelet.labels" . | indent 4 }}
+spec:
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "test-virtual-kubelet.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
